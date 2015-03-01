@@ -37,10 +37,18 @@ app.get("/restaurants", function(request, response){
 	response.send(restaurants);
 });
 
-app.get("/restaurants/:name", function(request,response){
+app.get("/restaurants/:restaurant_name", function(request,response){
 	//Get a specific restaurant (i.e. localhost:3000/restaurants/Lucky Wings)
 	var result = restaurants.filter(function( obj ) {
-		return obj.name == request.params.name;
+		return obj.name == request.params.restaurant_name;
+	});
+	response.send(result);
+});
+
+app.get("/:restaurant_name", function(request,response){
+	//Get a specific restaurant (i.e. localhost:3000/Lucky Wings)
+	var result = restaurants.filter(function( obj ) {
+		return obj.name == request.params.restaurant_name;
 	});
 	response.send(result);
 });
