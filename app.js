@@ -16,16 +16,19 @@ var restaurants = [{
 ];
 var dishes = [
 {
+	id:1,
 	restaurant_id: 1,
 	name: "10 Buffallo Wings",
 	price: 99
 },
 {
+	id:2,
 	restaurant_id: 1,
 	name: "20 Buffallo Wings",
 	price: 189
 },
 {
+	id:3,
 	restaurant_id: 2,
 	name: "Happy Meal",
 	price: 60
@@ -53,6 +56,24 @@ var tables = [
 		description: "Test table"
 	},
 ];
+var orders=[
+	{
+		id: 1,
+		restaurant_id: 1,
+		table_number: 1,
+		dishes: [
+			{
+				dish_id: 1,
+				count: 1
+			},
+			{
+				dish_id: 1,
+				count: 2
+			}
+		],
+		delivered:true
+	}
+];
 
 app.get("/", function(request, response){
 	response.send("Index");
@@ -78,6 +99,22 @@ app.get("/restaurants/:restaurant_name/tables/", function(request,response){	//G
 	var restaurant = findBy(restaurants, "name", request.params.restaurant_name)[0].id;
 
 	response.send(findBy(tables, "restaurant_id", restaurant));
+});
+
+app.get("/restaurants/:restaurant_name/orders/", function(request, response){
+	//Get restaurant ID from name
+	var restaurant = findBy(restaurants, "name", request.params.restaurant_name)[0].id;
+
+	allRestaurantOrders = findBy(orders, "restaurant_id", restaurant);
+	if(request.query.delivered=="true"){
+		response.send(findBy(allRestaurantOrders, "delivered", true));
+	}
+	else if(request.query.delivered=="false"){
+		response.send(findBy(allRestaurantOrders, "delivered", false));
+	}
+	else{
+		response.send(allRestaurantOrders);
+	}
 });
 
 function findBy(arrayOfObjects, property, value){
